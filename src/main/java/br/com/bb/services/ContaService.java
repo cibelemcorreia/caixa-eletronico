@@ -2,10 +2,12 @@ package br.com.bb.services;
 
 import br.com.bb.controller.error.BusinessException;
 import br.com.bb.model.dto.ContaRequestDto;
+import br.com.bb.model.dto.MovimentoRequestDto;
 import br.com.bb.model.entity.Conta;
 import br.com.bb.repository.ContaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
@@ -35,27 +37,32 @@ public class ContaService {
 		return repository.save(conta);
 	}
 
-	public Conta editarConta(Long contaId, ContaRequestDto requestDto) {
+	public Conta editarConta(Long id, ContaRequestDto requestDto) {
 		Optional<Conta> optional = repository.findByCpfCnpj(requestDto.getCpfCnpj());
 		if (optional.isPresent()) {
 			throw new BusinessException("CPF/CNPJ já cadastrado em nossa base de dados");
 		}
 
-		Conta conta = repository.findById(contaId) .orElseThrow(() ->
+		Conta conta = repository.findById(id) .orElseThrow(() ->
 				new EntityNotFoundException("Conta não encontrada."));
 		conta.setNome(requestDto.getNome()); conta.setCpfCnpj(requestDto.getCpfCnpj());
 		return repository.save(conta); }
 
 
 	@Transactional
-	public Conta depositar(@Valid String cpfCnpj, String numeroConta, BigDecimal valor) {
-		Conta conta = repository.findByCpfCnpjAndNumeroConta(cpfCnpj, numeroConta)
-				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada."));
+	public Conta depositar(@Valid @RequestBody MovimentoRequestDto requestDto) {
+		Optional<Conta> optionalConta = repository.findByCpfCnpj(requestDto.getCpfCnpj());
+		if(!optionalConta.isPresent()){
+			throw new EntityNotFoundException("Conta não encontrada");
+		}
+
+		BigDecimal valor = requestDto.getValor();
 
 		if (valor.compareTo(BigDecimal.ZERO) <= 0.00) {
 			throw new BusinessException("Valor inválido!");
 		}
 
+		Conta conta = optionalConta.get();
 		BigDecimal novoSaldo = conta.getSaldo().add(valor);
 		conta.setSaldo(novoSaldo);
 
@@ -64,7 +71,7 @@ public class ContaService {
 
 	@Transactional
 	public Conta sacar(@Valid String cpfCnpj, String numeroConta, BigDecimal valor) {
-		Conta conta = repository.findByCpfCnpjAndNumeroConta(cpfCnpj, numeroConta)
+		Conta conta = repository.findByCpfCnpj(cpfCnpj)
 				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada."));
 
 		if (valor.compareTo(BigDecimal.ZERO) <= 0.00) {
@@ -84,7 +91,7 @@ public class ContaService {
 
 	public Conta consultarDados(String cpfCnpj, String numeroConta) {
 
-		Optional<Conta> optional = repository.findByCpfCnpjAndNumeroConta(cpfCnpj, numeroConta);
+		Optional<Conta> optional = repository.findByCpfCnpj(cpfCnpj);
 
 		if (optional.isPresent()) {
 			Conta conta = optional.get();
@@ -99,7 +106,7 @@ public class ContaService {
 	}
 
 	public BigDecimal consultarSaldo(String cpfCnpj, String numeroConta) {
-		Conta conta = repository.findByCpfCnpjAndNumeroConta(cpfCnpj, numeroConta)
+		Conta conta = repository.findByCpfCnpj(cpfCnpj)
 				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada."));
 		return conta.getSaldo();
 	}

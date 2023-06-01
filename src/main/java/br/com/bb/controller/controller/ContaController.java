@@ -38,8 +38,8 @@ public class ContaController {
 	}
 
 	@PostMapping("/conta/deposito")
-	public ResponseEntity<String> realizarDeposito(@Valid @RequestBody MovimentoRequestDto requestDto) {
-		Conta conta = service.depositar(requestDto.getCpfCnpj(), requestDto.getNumeroConta(), requestDto.getValor());
+	public ResponseEntity<String> depositar(@Valid @RequestBody MovimentoRequestDto requestDto) {
+		Conta conta = service.depositar(requestDto);
 		return ResponseEntity.status(HttpStatus.OK).body("Depósito realizado com sucesso!");
 	}
 

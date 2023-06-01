@@ -12,11 +12,9 @@ import java.util.Optional;
 @Repository
 public interface ContaRepository extends JpaRepository<Conta, Long> {
 
-	@Query("SELECT c FROM Conta c WHERE REPLACE(REPLACE(REPLACE(c.cpfCnpj, '.', ''), '-', ''), '/', '') = :cpfCnpj")
-	Optional<Conta> findByCpfCnpj(@Param("cpfCnpj") String cpfCnpj);
+	Optional<Conta> findByCpfCnpj(String cpfCnpj);
 
-	@Query("SELECT c FROM Conta c WHERE REPLACE(REPLACE(REPLACE(c.cpfCnpj, '.', ''), '-', ''), '/', '') = :cpfCnpj AND REPLACE(c.numeroConta, '-', '') = :numeroConta")
-	Optional<Conta> findByCpfCnpjAndNumeroConta(@Param("cpfCnpj") String cpfCnpj, @Param("numeroConta") String numeroConta);
+	//Optional<Conta> findByCpfCnpjAndNumeroConta(@Param("cpfCnpj") String cpfCnpj, @Param("numeroConta") String numeroConta);
 
 	Optional<Conta> findById(Long id);
 
