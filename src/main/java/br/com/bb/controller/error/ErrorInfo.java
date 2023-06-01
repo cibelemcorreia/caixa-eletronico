@@ -1,4 +1,4 @@
-package br.com.bb.exception;
+package br.com.bb.controller.error;
 
 import lombok.Getter;
 import lombok.Setter;

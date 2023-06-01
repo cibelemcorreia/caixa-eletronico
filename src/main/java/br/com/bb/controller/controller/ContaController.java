@@ -1,4 +1,4 @@
-package br.com.bb.controller;
+package br.com.bb.controller.controller;
 
 import br.com.bb.model.dto.*;
 import br.com.bb.model.entity.Conta;
@@ -49,17 +49,17 @@ public class ContaController {
 		return ResponseEntity.status(HttpStatus.OK).body("Saque realizado com sucesso!");
 	}
 
-	@GetMapping("/conta")
-	public ResponseEntity<ContaResponseDto> consultarConta(@Valid @RequestBody ConsultasRequestDto requestDto) {
-		Conta conta = service.consultarConta(requestDto.getCpfCnpj(), requestDto.getNumeroConta());
+	@GetMapping("/conta/{cpfCnpj}/{numeroConta}")
+	public ResponseEntity<ContaResponseDto> consultarDados(@PathVariable String cpfCnpj, @PathVariable String numeroConta) {
+		Conta conta = service.consultarDados(cpfCnpj, numeroConta);
 		ContaResponseDto response = new ContaResponseDto(conta.getId(), conta.getNome(),
 				conta.getCpfCnpj(), conta.getNumeroConta(), conta.getSaldo());
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
-	@GetMapping("/conta/saldo")
-	public ResponseEntity<ConsultasResponseDto> consultarSaldo(@Valid @RequestBody ConsultasRequestDto requestDto) {
-		BigDecimal saldo = service.consultarSaldo(requestDto.getCpfCnpj(), requestDto.getNumeroConta());
+	@GetMapping("/conta/saldo/{cpfCnpj}/{numeroConta}")
+	public ResponseEntity<ConsultasResponseDto> consultarSaldo(@PathVariable String cpfCnpj, @PathVariable String numeroConta) {
+		BigDecimal saldo = service.consultarSaldo(cpfCnpj, numeroConta);
 		String saldoFormatado = "R$ " + saldo.toString();
 		ConsultasResponseDto responseDto = new ConsultasResponseDto(saldoFormatado);
 		return ResponseEntity.status(HttpStatus.OK).body(responseDto);

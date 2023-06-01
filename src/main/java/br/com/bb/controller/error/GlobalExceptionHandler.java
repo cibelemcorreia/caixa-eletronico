@@ -1,4 +1,4 @@
-package br.com.bb.exception;
+package br.com.bb.controller.error;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

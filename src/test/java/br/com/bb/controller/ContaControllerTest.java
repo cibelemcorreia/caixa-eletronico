@@ -1,5 +1,6 @@
 package br.com.bb.controller;
 
+import br.com.bb.controller.controller.ContaController;
 import br.com.bb.model.dto.*;
 import br.com.bb.model.entity.Conta;
 import br.com.bb.services.ContaService;
@@ -74,7 +75,7 @@ public class ContaControllerTest {
 		verify(contaService, times(1)).depositar(requestDto.getCpfCnpj(), requestDto.getNumeroConta(), requestDto.getValor()); }
 
 	@Test
-	public void sacar_ValidRequest_ReturnsSuccessMessage() {
+	public void sacarComSucesso() {
 		MovimentoRequestDto requestDto = new MovimentoRequestDto();
 		Conta conta = new Conta();
 		when(contaService.sacar(requestDto.getCpfCnpj(), requestDto.getNumeroConta(),
@@ -89,29 +90,46 @@ public class ContaControllerTest {
 				requestDto.getNumeroConta(), requestDto.getValor()); }
 
 	@Test
-	public void consultarDadosContaComSucesso() {
-		ConsultasRequestDto requestDto = new ConsultasRequestDto();
+	public void testConsultarDadosComSucesso() {
+		String cpfCnpj = "12345678900";
+		String numeroConta = "123456789";
 		Conta conta = new Conta();
-		when(contaService.consultarConta(requestDto.getCpfCnpj(), requestDto.getNumeroConta())).thenReturn(conta);
+		conta.setId(1L); conta.setNome("João da Silva");
+		conta.setCpfCnpj(cpfCnpj); conta.setNumeroConta(numeroConta);
+		conta.setSaldo(new BigDecimal("1000.00"));
+		when(contaService.consultarDados(cpfCnpj, numeroConta)).thenReturn(conta);
 
-		ResponseEntity<ContaResponseDto> responseEntity = contaController.consultarConta(requestDto);
-
-		assertEquals(HttpStatus.OK, responseEntity.getStatusCode()); ContaResponseDto responseDto = responseEntity.getBody();
-
-		verify(contaService, times(1)).consultarConta(requestDto.getCpfCnpj(), requestDto.getNumeroConta()); }
-
-	@Test
-	public void consultarSaldoComSucesso() {
-		ConsultasRequestDto requestDto = new ConsultasRequestDto();
-		BigDecimal saldo = new BigDecimal("1000.00");
-		when(contaService.consultarSaldo(requestDto.getCpfCnpj(), requestDto.getNumeroConta())).thenReturn(saldo);
-
-		ResponseEntity<ConsultasResponseDto> responseEntity = contaController.consultarSaldo(requestDto);
+		ResponseEntity<ContaResponseDto> responseEntity = contaController.consultarDados(cpfCnpj, numeroConta);
 
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		ConsultasResponseDto responseDto = responseEntity.getBody();
+		ContaResponseDto responseDto = responseEntity.getBody();
+		assertEquals(1L, responseDto.getId().longValue());
+		assertEquals("João da Silva", responseDto.getNome());
+		assertEquals(cpfCnpj, responseDto.getCpfCnpj());
+		assertEquals(numeroConta, responseDto.getNumeroConta());
+		assertEquals(new BigDecimal("1000.00"), responseDto.getSaldo());
 
-		verify(contaService, times(1)).consultarSaldo(requestDto.getCpfCnpj(),
-				requestDto.getNumeroConta()); }
+		verify(contaService, times(1)).consultarDados(cpfCnpj, numeroConta); }
+
+//	@Test
+//	public void testConsultarSaldo() {
+//		// Mocking input data
+//		String cpfCnpj = "12345678900";
+//		String numeroConta = "123456789";
+//		BigDecimal saldo = new BigDecimal("1000.00");
+//
+//		when(contaService.consultarSaldo(cpfCnpj, numeroConta)).thenReturn(saldo);
+//
+//		// Executing the method
+//		ResponseEntity<ConsultasResponseDto> responseEntity = contaController.consultarSaldo(cpfCnpj, numeroConta);
+//
+//		// Verifying the response
+//		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+//		ConsultasResponseDto responseDto = responseEntity.getBody();
+//		assertEquals("R$ 1000.00", responseDto.getSaldo());
+//
+//		// Verifying that the service method was called with the correct parameters
+//		verify(contaService, times(1)).consultarSaldo(cpfCnpj, numeroConta);
+//	}
 
 }

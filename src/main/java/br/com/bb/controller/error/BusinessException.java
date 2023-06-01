@@ -1,4 +1,4 @@
-package br.com.bb.exception;
+package br.com.bb.controller.error;
 
 public class BusinessException extends RuntimeException {
 	public BusinessException(String message) {

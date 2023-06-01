@@ -1,6 +1,6 @@
 package br.com.bb.services;
 
-import br.com.bb.exception.BusinessException;
+import br.com.bb.controller.error.BusinessException;
 import br.com.bb.model.dto.ContaRequestDto;
 import br.com.bb.model.entity.Conta;
 import br.com.bb.repository.ContaRepository;
@@ -52,7 +52,7 @@ public class ContaService {
 		Conta conta = repository.findByCpfCnpjAndNumeroConta(cpfCnpj, numeroConta)
 				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada."));
 
-		if (valor.compareTo(BigDecimal.ZERO) < 0) {
+		if (valor.compareTo(BigDecimal.ZERO) <= 0.00) {
 			throw new BusinessException("Valor inválido!");
 		}
 
@@ -67,14 +67,14 @@ public class ContaService {
 		Conta conta = repository.findByCpfCnpjAndNumeroConta(cpfCnpj, numeroConta)
 				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada."));
 
-		if (valor.compareTo(BigDecimal.ZERO) < 0) {
+		if (valor.compareTo(BigDecimal.ZERO) <= 0.00) {
 			throw new BusinessException("Valor inválido!");
 		}
 
 		BigDecimal saldoAtual = conta.getSaldo();
 		if (valor.compareTo(saldoAtual) > 0) {
 			throw new BusinessException("Valor indisponível para saque!");
-		} //PENSAR NESTA EXCEPTION
+		}
 
 		BigDecimal novoSaldo = saldoAtual.subtract(valor);
 		conta.setSaldo(novoSaldo);
@@ -82,7 +82,8 @@ public class ContaService {
 		return repository.save(conta);
 	}
 
-	public Conta consultarConta(String cpfCnpj, String numeroConta) {
+	public Conta consultarDados(String cpfCnpj, String numeroConta) {
+
 		Optional<Conta> optional = repository.findByCpfCnpjAndNumeroConta(cpfCnpj, numeroConta);
 
 		if (optional.isPresent()) {
@@ -100,7 +101,6 @@ public class ContaService {
 	public BigDecimal consultarSaldo(String cpfCnpj, String numeroConta) {
 		Conta conta = repository.findByCpfCnpjAndNumeroConta(cpfCnpj, numeroConta)
 				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada."));
-
 		return conta.getSaldo();
 	}
 

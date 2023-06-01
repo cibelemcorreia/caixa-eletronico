@@ -15,11 +15,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ContaRequestDto {
-
-	private static final String NAME_VALIDATION = "^[\\p{L}]{2,}(?: [\\p{L}]+){1,6}$";
-	//private static final String REQUIRED_NAME_FIELD = "O campo nome é obrigatório.";
-	//private static final String REQUIRED_CPFCNPJ_FIELD = "O CPF/CNPJ nome é obrigatório.";
-	// private static final String REQUIRED_NUMCONTA_FIELD = "O número da conta é obrigatório.";
+	private static final String NAME_VALIDATION = "^[\\p{L}]{2,}(?: [\\p{L}]+)?$";
 
 	@NotBlank(message = "O campo nome é obrigatório.")
 	@Size(max = 100, message = "Máximo 100 caracteres")
