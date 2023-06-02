@@ -33,7 +33,7 @@ public class ContaControllerTest {
 	}
 
 	@Test
-	public void cadastrarContaComSucesso() {
+	public void testCadastrarContaComSucesso() {
 		ContaRequestDto requestDto = new ContaRequestDto();
 		Conta conta = new Conta();
 		when(contaService.cadastrarConta(requestDto)).thenReturn(conta);
@@ -41,13 +41,12 @@ public class ContaControllerTest {
 		ResponseEntity<ContaResponseDto> responseEntity = contaController.cadastrarConta(requestDto);
 
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		ContaResponseDto responseDto = responseEntity.getBody();
 
 		verify(contaService, times(1)).cadastrarConta(requestDto);
 	}
 
 	@Test
-	public void editarContaComSucesso() {
+	public void testEditarContaComSucesso() {
 		Long id = 1L;
 		ContaRequestDto requestDto = new ContaRequestDto();
 		Conta conta = new Conta();
@@ -56,21 +55,22 @@ public class ContaControllerTest {
 		ResponseEntity<ContaResponseDto> responseEntity = contaController.editarConta(id, requestDto);
 
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		ContaResponseDto responseDto = responseEntity.getBody();
 
 		verify(contaService, times(1)).editarConta(id, requestDto); }
 
 	@Test
-	public void testDepositarComSucesso() {
+	public void testDepositarValorComSucesso() {
 		MovimentoRequestDto requestDto = new MovimentoRequestDto();
 		Conta conta = new Conta();
 		when(contaService.depositar(requestDto)).thenReturn(conta);
+
 		ResponseEntity<String> responseEntity = contaController.depositar(requestDto);
+
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals("Depósito realizado com sucesso!", responseEntity.getBody());
 		verify(contaService, times(1)).depositar(requestDto); }
 	@Test
-	public void sacarComSucesso() {
+	public void testSacarValorComSucesso() {
 		MovimentoRequestDto requestDto = new MovimentoRequestDto();
 		Conta conta = new Conta();
 		when(contaService.sacar(requestDto.getCpfCnpj(), requestDto.getNumeroConta(),
@@ -86,10 +86,10 @@ public class ContaControllerTest {
 
 	@Test
 	public void testConsultarDadosComSucesso() {
-		String cpfCnpj = "12345678900";
-		String numeroConta = "123456789";
+		String cpfCnpj = "00000000001";
+		String numeroConta = "123456";
 		Conta conta = new Conta();
-		conta.setId(1L); conta.setNome("João da Silva");
+		conta.setId(1L); conta.setNome("Luke Skywalker");
 		conta.setCpfCnpj(cpfCnpj); conta.setNumeroConta(numeroConta);
 		conta.setSaldo(new BigDecimal("1000.00"));
 		when(contaService.consultarDados(cpfCnpj, numeroConta)).thenReturn(conta);
@@ -99,7 +99,7 @@ public class ContaControllerTest {
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		ContaResponseDto responseDto = responseEntity.getBody();
 		assertEquals(1L, responseDto.getId().longValue());
-		assertEquals("João da Silva", responseDto.getNome());
+		assertEquals("Luke Skywalker", responseDto.getNome());
 		assertEquals(cpfCnpj, responseDto.getCpfCnpj());
 		assertEquals(numeroConta, responseDto.getNumeroConta());
 		assertEquals(new BigDecimal("1000.00"), responseDto.getSaldo());
@@ -108,10 +108,9 @@ public class ContaControllerTest {
 
 	@Test
 	public void testConsultarSaldo() {
-		String cpfCnpj = "12345678900";
-		String numeroConta = "123456789";
+		String cpfCnpj = "00000000001";
+		String numeroConta = "123456";
 		BigDecimal saldo = new BigDecimal("1000.00");
-
 		when(contaService.consultarSaldo(cpfCnpj, numeroConta)).thenReturn(saldo);
 
 		ResponseEntity<ConsultasResponseDto> responseEntity = contaController.consultarSaldo(cpfCnpj, numeroConta);

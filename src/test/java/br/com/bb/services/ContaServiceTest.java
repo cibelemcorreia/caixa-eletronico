@@ -1,9 +1,10 @@
+package br.com.bb.services;
+
 import br.com.bb.controller.error.BusinessException;
 import br.com.bb.model.dto.ContaRequestDto;
 import br.com.bb.model.dto.MovimentoRequestDto;
 import br.com.bb.model.entity.Conta;
 import br.com.bb.repository.ContaRepository;
-import br.com.bb.services.ContaService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -14,7 +15,8 @@ import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 public class ContaServiceTest {
