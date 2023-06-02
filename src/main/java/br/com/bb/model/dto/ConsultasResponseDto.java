@@ -9,5 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ConsultasResponseDto {
 
-	private String valor;
+	private String saldo;
 }

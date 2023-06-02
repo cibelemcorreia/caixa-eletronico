@@ -120,7 +120,7 @@ public class ContaService {
 
 	public BigDecimal consultarSaldo(String cpfCnpj, String numeroConta) {
 		Conta conta = repository.findByCpfCnpj(cpfCnpj)
-				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada."));
+				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
 		return conta.getSaldo();
 	}
 

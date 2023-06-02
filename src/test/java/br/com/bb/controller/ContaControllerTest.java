@@ -46,34 +46,29 @@ public class ContaControllerTest {
 		verify(contaService, times(1)).cadastrarConta(requestDto);
 	}
 
-//	@Test
-//	public void editarContaComSucesso() {
-//		Long id = 1L;
-//		ContaRequestDto requestDto = new ContaRequestDto();
-//		Conta conta = new Conta();
-//		when(contaService.editarConta(id, requestDto)).thenReturn(conta);
-//
-//		ResponseEntity<ContaResponseDto> responseEntity = contaController.editarConta(id, requestDto);
-//
-//		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-//		ContaResponseDto responseDto = responseEntity.getBody();
-//
-//		verify(contaService, times(1)).editarConta(id, requestDto); }
+	@Test
+	public void editarContaComSucesso() {
+		Long id = 1L;
+		ContaRequestDto requestDto = new ContaRequestDto();
+		Conta conta = new Conta();
+		when(contaService.editarConta(id, requestDto)).thenReturn(conta);
 
-//	@Test
-//	public void TestDepositarComSucesso() {
-//		// Mocking input data
-//		MovimentoRequestDto requestDto = new MovimentoRequestDto();
-//		Conta conta = new Conta();
-//		when(contaService.depositar(requestDto.getCpfCnpj(), requestDto.getNumeroConta(), requestDto.getValor())).thenReturn(conta);
-//
-//		ResponseEntity<String> responseEntity = contaController.depositar(requestDto);
-//
-//		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-//		assertEquals("Depósito realizado com sucesso!", responseEntity.getBody());
-//
-//		verify(contaService, times(1)).depositar(requestDto.getCpfCnpj(), requestDto.getNumeroConta(), requestDto.getValor()); }
+		ResponseEntity<ContaResponseDto> responseEntity = contaController.editarConta(id, requestDto);
 
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		ContaResponseDto responseDto = responseEntity.getBody();
+
+		verify(contaService, times(1)).editarConta(id, requestDto); }
+
+	@Test
+	public void testDepositarComSucesso() {
+		MovimentoRequestDto requestDto = new MovimentoRequestDto();
+		Conta conta = new Conta();
+		when(contaService.depositar(requestDto)).thenReturn(conta);
+		ResponseEntity<String> responseEntity = contaController.depositar(requestDto);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals("Depósito realizado com sucesso!", responseEntity.getBody());
+		verify(contaService, times(1)).depositar(requestDto); }
 	@Test
 	public void sacarComSucesso() {
 		MovimentoRequestDto requestDto = new MovimentoRequestDto();
@@ -111,25 +106,21 @@ public class ContaControllerTest {
 
 		verify(contaService, times(1)).consultarDados(cpfCnpj, numeroConta); }
 
-//	@Test
-//	public void testConsultarSaldo() {
-//		// Mocking input data
-//		String cpfCnpj = "12345678900";
-//		String numeroConta = "123456789";
-//		BigDecimal saldo = new BigDecimal("1000.00");
-//
-//		when(contaService.consultarSaldo(cpfCnpj, numeroConta)).thenReturn(saldo);
-//
-//		// Executing the method
-//		ResponseEntity<ConsultasResponseDto> responseEntity = contaController.consultarSaldo(cpfCnpj, numeroConta);
-//
-//		// Verifying the response
-//		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-//		ConsultasResponseDto responseDto = responseEntity.getBody();
-//		assertEquals("R$ 1000.00", responseDto.getSaldo());
-//
-//		// Verifying that the service method was called with the correct parameters
-//		verify(contaService, times(1)).consultarSaldo(cpfCnpj, numeroConta);
-//	}
+	@Test
+	public void testConsultarSaldo() {
+		String cpfCnpj = "12345678900";
+		String numeroConta = "123456789";
+		BigDecimal saldo = new BigDecimal("1000.00");
+
+		when(contaService.consultarSaldo(cpfCnpj, numeroConta)).thenReturn(saldo);
+
+		ResponseEntity<ConsultasResponseDto> responseEntity = contaController.consultarSaldo(cpfCnpj, numeroConta);
+
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		ConsultasResponseDto responseDto = responseEntity.getBody();
+		assertEquals("R$ 1000.00", responseDto.getSaldo());
+
+		verify(contaService, times(1)).consultarSaldo(cpfCnpj, numeroConta);
+	}
 
 }
