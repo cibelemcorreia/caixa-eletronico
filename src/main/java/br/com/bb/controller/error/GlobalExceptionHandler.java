@@ -21,7 +21,6 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
 	@ResponseBody
 	public ErrorResponse handleBusinessException(BusinessException ex){
-
 		return new ErrorResponse("422", ex.getMessage());
 	}
 
@@ -30,7 +29,6 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorInfo> handleValidationException(MethodArgumentNotValidException ex) {
 		BindingResult bindingResult = ex.getBindingResult();
 		List<String> errorMessages = new ArrayList<>();
-
 		for (FieldError fieldError : bindingResult.getFieldErrors()) {
 			String errorMessage = fieldError.getDefaultMessage();
 			if (errorMessage == null || errorMessage.isEmpty()) {
@@ -38,7 +36,6 @@ public class GlobalExceptionHandler {
 			}
 			errorMessages.add(errorMessage);
 		}
-
 		ErrorInfo errorResponse = new ErrorInfo("Erro de validação", errorMessages);
 		return ResponseEntity.unprocessableEntity().body(errorResponse);
 	}

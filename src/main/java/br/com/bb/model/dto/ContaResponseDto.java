@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ContaResponseDto {
 
-	@JsonIgnore
 	private Long id;
 
 	private String nome;

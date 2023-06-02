@@ -1,10 +1,8 @@
 package br.com.bb.repository;
 
 import br.com.bb.model.entity.Conta;
-import br.com.bb.services.ContaService;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -19,9 +17,6 @@ public class ContaRepositoryTest {
 	@Mock
 	private ContaRepository contaRepository;
 
-	@InjectMocks
-	private ContaService contaService;
-
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
@@ -29,7 +24,7 @@ public class ContaRepositoryTest {
 
 	@Test
 	public void testFindByCpfCnpj() {
-		String cpfCnpj = "12345678900";
+		String cpfCnpj = "00000000001";
 		Conta conta = new Conta();
 		when(contaRepository.findByCpfCnpj(cpfCnpj)).thenReturn(Optional.of(conta));
 		Optional<Conta> result = contaRepository.findByCpfCnpj(cpfCnpj);
@@ -50,7 +45,7 @@ public class ContaRepositoryTest {
 
 	@Test
 	public void testExistsByCpfCnpj() {
-		String cpfCnpj = "12345678900";
+		String cpfCnpj = "00000000001";
 		when(contaRepository.existsByCpfCnpj(cpfCnpj)).thenReturn(true);
 		boolean result = contaRepository.existsByCpfCnpj(cpfCnpj);
 		assertTrue(result);
@@ -58,7 +53,7 @@ public class ContaRepositoryTest {
 
 	@Test
 	public void testExistsByCpfCnpjWithOrWithoutSeparators() {
-		String cpfCnpj = "123.456.789-00";
+		String cpfCnpj = "000.000.000-01";
 		when(contaRepository.existsByCpfCnpjWithOrWithoutSeparators(cpfCnpj)).thenReturn(true);
 		boolean result = contaRepository.existsByCpfCnpjWithOrWithoutSeparators(cpfCnpj);
 		assertTrue(result);

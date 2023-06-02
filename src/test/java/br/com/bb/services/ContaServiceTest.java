@@ -35,8 +35,8 @@ public class ContaServiceTest {
 	@Test
 	public void testCadastrarConta() {
 		ContaRequestDto requestDto = new ContaRequestDto();
-		requestDto.setNome("John Doe");
-		requestDto.setCpfCnpj("12345678900");
+		requestDto.setNome("Luke Skywalker");
+		requestDto.setCpfCnpj("00000000001");
 		requestDto.setNumeroConta("123456");
 		requestDto.setSaldo(BigDecimal.ZERO);
 
@@ -63,8 +63,8 @@ public class ContaServiceTest {
 	@Test(expected = BusinessException.class)
 	public void testCadastrarConta_DuplicateCpfCnpj() {
 		ContaRequestDto requestDto = new ContaRequestDto();
-		requestDto.setNome("John Doe");
-		requestDto.setCpfCnpj("12345678900");
+		requestDto.setNome("Luke Skywalker");
+		requestDto.setCpfCnpj("00000000001");
 		requestDto.setNumeroConta("123456");
 		requestDto.setSaldo(BigDecimal.ZERO);
 
@@ -76,7 +76,7 @@ public class ContaServiceTest {
 	@Test
 	public void testDepositarValor() {
 		MovimentoRequestDto requestDto = new MovimentoRequestDto();
-		requestDto.setCpfCnpj("12345678900");
+		requestDto.setCpfCnpj("00000000001");
 		requestDto.setValor(BigDecimal.TEN);
 
 		Conta conta = new Conta();
@@ -95,7 +95,7 @@ public class ContaServiceTest {
 	@Test(expected = EntityNotFoundException.class)
 	public void testDepositarValorContaNaoEncontrada() {
 		MovimentoRequestDto requestDto = new MovimentoRequestDto();
-		requestDto.setCpfCnpj("12345678900");
+		requestDto.setCpfCnpj("00000000001");
 		requestDto.setValor(BigDecimal.TEN);
 
 		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.empty());
@@ -105,7 +105,7 @@ public class ContaServiceTest {
 
 	@Test
 	public void testSacarValor() {
-		String cpfCnpj = "12345678900";
+		String cpfCnpj = "00000000001";
 		String numeroConta = "123456";
 		BigDecimal valor = BigDecimal.TEN;
 
@@ -177,7 +177,7 @@ public class ContaServiceTest {
 
 	@Test(expected = EntityNotFoundException.class)
 	public void testConsultarDadosContaNaoEncontrada() {
-		String cpfCnpj = "12345678900";
+		String cpfCnpj = "00000000001";
 		String numeroConta = "123456";
 
 		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.empty());

@@ -32,7 +32,7 @@ public class ContaService {
 	private void verificaDuplicidade(String cpfCnpj) {
 		if (repository.existsByCpfCnpj(cpfCnpj) ||
 				repository.existsByCpfCnpjWithOrWithoutSeparators(cpfCnpj)) {
-		throw new BusinessException("CPF/CNPJ já cadastrado em nossa base de dados"); }
+			throw new BusinessException("CPF/CNPJ já cadastrado em nossa base de dados"); }
 	}
 
 	private String normalizeCpfCnpj(String cpfCnpj){
@@ -123,6 +123,5 @@ public class ContaService {
 				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
 		return conta.getSaldo();
 	}
-
 
 }
