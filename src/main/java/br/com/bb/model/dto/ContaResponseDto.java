@@ -1,5 +1,6 @@
 package br.com.bb.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ContaResponseDto {
 
+	@JsonIgnore
 	private Long id;
 
 	private String nome;

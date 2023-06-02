@@ -23,13 +23,13 @@ public class ContaService {
 
 	public Conta cadastrarConta(ContaRequestDto requestDto) {
 		String cpfCnpj = normalizeCpfCnpj(requestDto.getCpfCnpj());
-		verifyCpfCnpjNotDuplicated(cpfCnpj);
+		verificaDuplicidade(cpfCnpj);
 		Conta conta = new Conta( requestDto.getNome(), cpfCnpj, requestDto.getNumeroConta(),
 				requestDto.getSaldo() );
 
 		return repository.save(conta);
 	}
-	private void verifyCpfCnpjNotDuplicated(String cpfCnpj) {
+	private void verificaDuplicidade(String cpfCnpj) {
 		if (repository.existsByCpfCnpj(cpfCnpj) ||
 				repository.existsByCpfCnpjWithOrWithoutSeparators(cpfCnpj)) {
 		throw new BusinessException("CPF/CNPJ já cadastrado em nossa base de dados"); }
@@ -42,7 +42,7 @@ public class ContaService {
 	public Conta editarConta(Long id, ContaRequestDto requestDto) {
 		String cpfCnpj = normalizeCpfCnpj(requestDto.getCpfCnpj());
 
-		verifyCpfCnpjNotDuplicated(cpfCnpj, id);
+		verificaDuplicidade(cpfCnpj, id);
 
 		Conta conta = repository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
@@ -52,7 +52,7 @@ public class ContaService {
 		return repository.save(conta);
 	}
 
-	private void verifyCpfCnpjNotDuplicated(String cpfCnpj, Long id) {
+	private void verificaDuplicidade(String cpfCnpj, Long id) {
 		Optional<Conta> optional = repository.findByCpfCnpj(cpfCnpj);
 		if (optional.isPresent()) {
 			Conta existingConta = optional.get();
@@ -63,7 +63,7 @@ public class ContaService {
 	}
 
 	@Transactional
-	public Conta depositar(@Valid @RequestBody MovimentoRequestDto requestDto) {
+	public Conta realizarDeposito(@Valid @RequestBody MovimentoRequestDto requestDto) {
 		Optional<Conta> optionalConta = repository.findByCpfCnpj(requestDto.getCpfCnpj());
 		if(!optionalConta.isPresent()){
 			throw new EntityNotFoundException("Conta não encontrada");
@@ -83,7 +83,7 @@ public class ContaService {
 	}
 
 	@Transactional
-	public Conta sacar(@Valid String cpfCnpj, String numeroConta, BigDecimal valor) {
+	public Conta realizarSaque(@Valid String cpfCnpj, String numeroConta, BigDecimal valor) {
 		Conta conta = repository.findByCpfCnpj(cpfCnpj)
 				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
 

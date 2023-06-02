@@ -74,7 +74,7 @@ public class ContaServiceTest {
 	}
 
 	@Test
-	public void testDepositar() {
+	public void testDepositarValor() {
 		MovimentoRequestDto requestDto = new MovimentoRequestDto();
 		requestDto.setCpfCnpj("12345678900");
 		requestDto.setValor(BigDecimal.TEN);
@@ -85,7 +85,7 @@ public class ContaServiceTest {
 		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.of(conta));
 		when(contaRepository.save(any(Conta.class))).thenReturn(conta);
 
-		Conta result = contaService.depositar(requestDto);
+		Conta result = contaService.realizarDeposito(requestDto);
 
 		assertNotNull(result);
 		assertEquals(BigDecimal.TEN, result.getSaldo());
@@ -93,27 +93,18 @@ public class ContaServiceTest {
 	}
 
 	@Test(expected = EntityNotFoundException.class)
-	public void testDepositar_ContaNotFound() {
+	public void testDepositarValorContaNaoEncontrada() {
 		MovimentoRequestDto requestDto = new MovimentoRequestDto();
 		requestDto.setCpfCnpj("12345678900");
 		requestDto.setValor(BigDecimal.TEN);
 
 		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.empty());
 
-		contaService.depositar(requestDto);
+		contaService.realizarDeposito(requestDto);
 	}
 
-//	@Test(expected = BusinessException.class)
-//	public void testDepositar_InvalidValue() {
-//		MovimentoRequestDto requestDto = new MovimentoRequestDto();
-//		requestDto.setCpfCnpj("12345678900");
-//		requestDto.setValor(BigDecimal.ZERO);
-//
-//		contaService.depositar(requestDto);
-//	}
-
 	@Test
-	public void testSacar() {
+	public void testSacarValor() {
 		String cpfCnpj = "12345678900";
 		String numeroConta = "123456";
 		BigDecimal valor = BigDecimal.TEN;
@@ -124,7 +115,7 @@ public class ContaServiceTest {
 		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.of(conta));
 		when(contaRepository.save(any(Conta.class))).thenReturn(conta);
 
-		Conta result = contaService.sacar(cpfCnpj, numeroConta, valor);
+		Conta result = contaService.realizarSaque(cpfCnpj, numeroConta, valor);
 
 		assertNotNull(result);
 		assertEquals(BigDecimal.ZERO, result.getSaldo());
@@ -132,27 +123,19 @@ public class ContaServiceTest {
 	}
 
 	@Test(expected = EntityNotFoundException.class)
-	public void testSacar_ContaNotFound() {
-		String cpfCnpj = "12345678900";
+	public void testSacarContaNaoEncontrada() {
+		String cpfCnpj = "00000000001";
 		String numeroConta = "123456";
 		BigDecimal valor = BigDecimal.TEN;
 
 		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.empty());
 
-		contaService.sacar(cpfCnpj, numeroConta, valor);
+		contaService.realizarSaque(cpfCnpj, numeroConta, valor);
 	}
 
-//	@Test(expected = BusinessException.class)
-//	public void testSacar_InvalidValue() {
-//		String cpfCnpj = "12345678900";
-//		String numeroConta = "123456";
-//		BigDecimal valor = BigDecimal.ZERO;
-//		contaService.sacar(cpfCnpj, numeroConta, valor);
-//	}
-
 	@Test(expected = BusinessException.class)
-	public void testSacar_InsufficientBalance() {
-		String cpfCnpj = "12345678900";
+	public void testSacarSaldoIndisponivel() {
+		String cpfCnpj = "00000000001";
 		String numeroConta = "123456";
 		BigDecimal valor = BigDecimal.TEN;
 
@@ -160,12 +143,12 @@ public class ContaServiceTest {
 		conta.setSaldo(BigDecimal.ONE);
 
 		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.of(conta));
-		contaService.sacar(cpfCnpj, numeroConta, valor);
+		contaService.realizarSaque(cpfCnpj, numeroConta, valor);
 	}
 
 	@Test
 	public void testConsultarDados() {
-		String cpfCnpj = "12345678900";
+		String cpfCnpj = "00000000001";
 		String numeroConta = "123456";
 
 		Conta conta = new Conta();
@@ -180,8 +163,8 @@ public class ContaServiceTest {
 	}
 
 	@Test(expected = BusinessException.class)
-	public void testConsultarDados_InvalidNumeroConta() {
-		String cpfCnpj = "12345678900";
+	public void testConsultarDadosContaInvalida() {
+		String cpfCnpj = "00000000001";
 		String numeroConta = "654321";
 
 		Conta conta = new Conta();
@@ -193,7 +176,7 @@ public class ContaServiceTest {
 	}
 
 	@Test(expected = EntityNotFoundException.class)
-	public void testConsultarDados_ContaNotFound() {
+	public void testConsultarDadosContaNaoEncontrada() {
 		String cpfCnpj = "12345678900";
 		String numeroConta = "123456";
 
@@ -202,27 +185,4 @@ public class ContaServiceTest {
 		contaService.consultarDados(cpfCnpj, numeroConta);
 	}
 
-//	@Test
-//	public void testConsultarSaldo() {
-//		String cpfCnpj = "12345678900";
-//
-//		Conta conta = new Conta();
-//		conta.setSaldo(BigDecimal.TEN);
-//
-//		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.of(conta));
-//
-//		BigDecimal result = contaService.consultarSaldo(cpfCnpj);
-//
-//		assertNotNull(result);
-//		assertEquals(BigDecimal.TEN, result);
-//	}
-
-//	@Test(expected = EntityNotFoundException.class)
-//	public void testConsultarSaldo_ContaNotFound() {
-//		String cpfCnpj = "12345678900";
-//
-//		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.empty());
-//
-//		contaService.consultarSaldo(cpfCnpj);
-//	}
 }

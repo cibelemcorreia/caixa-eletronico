@@ -38,14 +38,14 @@ public class ContaController {
 	}
 
 	@PostMapping("/conta/deposito")
-	public ResponseEntity<String> depositar(@Valid @RequestBody MovimentoRequestDto requestDto) {
-		Conta conta = service.depositar(requestDto);
+	public ResponseEntity<String> realizarDeposito(@Valid @RequestBody MovimentoRequestDto requestDto) {
+		Conta conta = service.realizarDeposito(requestDto);
 		return ResponseEntity.status(HttpStatus.OK).body("Depósito realizado com sucesso!");
 	}
 
 	@PostMapping("/conta/saque")
-	public ResponseEntity<String> sacar(@Valid @RequestBody MovimentoRequestDto requestDto) {
-		Conta conta = service.sacar(requestDto.getCpfCnpj(), requestDto.getNumeroConta(), requestDto.getValor());
+	public ResponseEntity<String> realizarSaque(@Valid @RequestBody MovimentoRequestDto requestDto) {
+		Conta conta = service.realizarSaque(requestDto.getCpfCnpj(), requestDto.getNumeroConta(), requestDto.getValor());
 		return ResponseEntity.status(HttpStatus.OK).body("Saque realizado com sucesso!");
 	}
 
