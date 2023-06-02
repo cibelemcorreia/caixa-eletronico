@@ -10,8 +10,8 @@ public class ErrorResponseTest {
 
 	@Test
 	public void testErrorResponse() {
-		String errorCode = "500";
-		String errorMessage = "Internal Server Error";
+		String errorCode = "422";
+		String errorMessage = "Unprocessable Entity";
 
 		ErrorResponse errorResponse = new ErrorResponse(errorCode, errorMessage);
 
@@ -21,7 +21,7 @@ public class ErrorResponseTest {
 	}
 
 	@Test
-	public void testErrorResponseWithNullCodeAndMessage() {
+	public void testErrorResponseCodeEMessageNulos() {
 		String errorCode = null;
 		String errorMessage = null;
 
@@ -33,7 +33,7 @@ public class ErrorResponseTest {
 	}
 
 	@Test
-	public void testErrorResponseWithEmptyCodeAndMessage() {
+	public void testErrorResponseCodeEMessageVazios() {
 		String errorCode = "";
 		String errorMessage = "";
 

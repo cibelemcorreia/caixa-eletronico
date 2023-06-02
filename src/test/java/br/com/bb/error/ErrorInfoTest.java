@@ -14,7 +14,7 @@ public class ErrorInfoTest {
 	@Test
 	public void testErrorInfo() {
 		String errorMessage = "Error message";
-		List<String> errors = Arrays.asList("Error 1", "Error 2");
+		List<String> errors = Arrays.asList("Erro 1", "Erro 2");
 
 		ErrorInfo errorInfo = new ErrorInfo(errorMessage, errors);
 
