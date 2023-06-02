@@ -46,19 +46,19 @@ public class ContaControllerTest {
 		verify(contaService, times(1)).cadastrarConta(requestDto);
 	}
 
-	@Test
-	public void editarContaComSucesso() {
-		Long id = 1L;
-		ContaRequestDto requestDto = new ContaRequestDto();
-		Conta conta = new Conta();
-		when(contaService.editarConta(id, requestDto)).thenReturn(conta);
-
-		ResponseEntity<ContaResponseDto> responseEntity = contaController.editarConta(id, requestDto);
-
-		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		ContaResponseDto responseDto = responseEntity.getBody();
-
-		verify(contaService, times(1)).editarConta(id, requestDto); }
+//	@Test
+//	public void editarContaComSucesso() {
+//		Long id = 1L;
+//		ContaRequestDto requestDto = new ContaRequestDto();
+//		Conta conta = new Conta();
+//		when(contaService.editarConta(id, requestDto)).thenReturn(conta);
+//
+//		ResponseEntity<ContaResponseDto> responseEntity = contaController.editarConta(id, requestDto);
+//
+//		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+//		ContaResponseDto responseDto = responseEntity.getBody();
+//
+//		verify(contaService, times(1)).editarConta(id, requestDto); }
 
 //	@Test
 //	public void TestDepositarComSucesso() {

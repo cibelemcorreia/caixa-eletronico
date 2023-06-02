@@ -22,32 +22,45 @@ public class ContaService {
 	ContaRepository repository;
 
 	public Conta cadastrarConta(ContaRequestDto requestDto) {
+		String cpfCnpj = normalizeCpfCnpj(requestDto.getCpfCnpj());
+		verifyCpfCnpjNotDuplicated(cpfCnpj);
+		Conta conta = new Conta( requestDto.getNome(), cpfCnpj, requestDto.getNumeroConta(),
+				requestDto.getSaldo() );
 
-		Optional<Conta> optional = repository.findByCpfCnpj(requestDto.getCpfCnpj());
-		if (optional.isPresent()) {
-			throw new BusinessException("CPF/CNPJ já cadastrado em nossa base de dados");
-		}
-
-		Conta conta = new Conta(
-				requestDto.getNome(),
-				requestDto.getCpfCnpj(),
-				requestDto.getNumeroConta(),
-				requestDto.getSaldo()
-		);
 		return repository.save(conta);
+	}
+	private void verifyCpfCnpjNotDuplicated(String cpfCnpj) {
+		if (repository.existsByCpfCnpj(cpfCnpj) ||
+				repository.existsByCpfCnpjWithOrWithoutSeparators(cpfCnpj)) {
+		throw new BusinessException("CPF/CNPJ já cadastrado em nossa base de dados"); }
+	}
+
+	private String normalizeCpfCnpj(String cpfCnpj){
+		return cpfCnpj.replaceAll("[./-]", "");
 	}
 
 	public Conta editarConta(Long id, ContaRequestDto requestDto) {
-		Optional<Conta> optional = repository.findByCpfCnpj(requestDto.getCpfCnpj());
+		String cpfCnpj = normalizeCpfCnpj(requestDto.getCpfCnpj());
+
+		verifyCpfCnpjNotDuplicated(cpfCnpj, id);
+
+		Conta conta = repository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
+		conta.setNome(requestDto.getNome());
+		conta.setCpfCnpj(cpfCnpj);
+
+		return repository.save(conta);
+	}
+
+	private void verifyCpfCnpjNotDuplicated(String cpfCnpj, Long id) {
+		Optional<Conta> optional = repository.findByCpfCnpj(cpfCnpj);
 		if (optional.isPresent()) {
-			throw new BusinessException("CPF/CNPJ já cadastrado em nossa base de dados");
+			Conta existingConta = optional.get();
+			if (!existingConta.getId().equals(id)) {
+				throw new BusinessException("CPF/CNPJ já cadastrado em nossa base de dados");
+			}
 		}
-
-		Conta conta = repository.findById(id) .orElseThrow(() ->
-				new EntityNotFoundException("Conta não encontrada."));
-		conta.setNome(requestDto.getNome()); conta.setCpfCnpj(requestDto.getCpfCnpj());
-		return repository.save(conta); }
-
+	}
 
 	@Transactional
 	public Conta depositar(@Valid @RequestBody MovimentoRequestDto requestDto) {
@@ -72,7 +85,7 @@ public class ContaService {
 	@Transactional
 	public Conta sacar(@Valid String cpfCnpj, String numeroConta, BigDecimal valor) {
 		Conta conta = repository.findByCpfCnpj(cpfCnpj)
-				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada."));
+				.orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
 
 		if (valor.compareTo(BigDecimal.ZERO) <= 0.00) {
 			throw new BusinessException("Valor inválido!");
@@ -98,10 +111,10 @@ public class ContaService {
 			if (conta.getNumeroConta().equals(numeroConta)) {
 				return conta;
 			} else {
-				throw new BusinessException("Número da conta inválido.");
+				throw new BusinessException("Número da conta inválido");
 			}
 		} else {
-			throw new EntityNotFoundException("Conta não encontrada.");
+			throw new EntityNotFoundException("Conta não encontrada");
 		}
 	}
 

@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Conta {
 
-	@Id //Serve como identificador único para facilitar o rastreio
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 

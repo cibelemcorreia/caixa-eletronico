@@ -23,7 +23,7 @@ public class ContaRequestDto {
 	@Pattern(regexp = NAME_VALIDATION, message = "Formato inválido")
 	private String nome;
 
-	@NotBlank(message = "O CPF/CNPJ nome é obrigatório")
+	@NotBlank(message = "O CPF ou CNPJ é obrigatório")
 	private String cpfCnpj;
 
 	@NotBlank(message = "O número da conta é obrigatório")

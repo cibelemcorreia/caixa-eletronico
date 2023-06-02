@@ -14,8 +14,11 @@ public interface ContaRepository extends JpaRepository<Conta, Long> {
 
 	Optional<Conta> findByCpfCnpj(String cpfCnpj);
 
-	//Optional<Conta> findByCpfCnpjAndNumeroConta(@Param("cpfCnpj") String cpfCnpj, @Param("numeroConta") String numeroConta);
-
 	Optional<Conta> findById(Long id);
+
+	boolean existsByCpfCnpj(String cpfCnpj);
+
+	@Query("SELECT COUNT(c) > 0 FROM Conta c WHERE REPLACE(c.cpfCnpj, '.', '') = REPLACE(:cpfCnpj, '.', '')")
+	boolean existsByCpfCnpjWithOrWithoutSeparators(@Param("cpfCnpj") String cpfCnpj);
 
 }

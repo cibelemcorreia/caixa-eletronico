@@ -11,12 +11,12 @@ import java.math.BigDecimal;
 @Setter
 public class MovimentoRequestDto {
 
-	@NotBlank(message = "O CPF ou CNPJ é obrigatório.")
+	@NotBlank(message = "O CPF ou CNPJ é obrigatório")
 	private String cpfCnpj;
 
-	@NotBlank(message = "O número da conta é obrigatório.")
+	@NotBlank(message = "O número da conta é obrigatório")
 	private String numeroConta;
 
-	@DecimalMin(value = "0.01", message = "Valor inválido.")
+	@DecimalMin(value = "0.01", message = "Valor inválido")
 	private BigDecimal valor;
 }
