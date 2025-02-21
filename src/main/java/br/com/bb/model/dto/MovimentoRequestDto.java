@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 
 @Getter

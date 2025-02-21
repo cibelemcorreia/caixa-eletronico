@@ -5,18 +5,19 @@ import br.com.bb.model.dto.ContaRequestDto;
 import br.com.bb.model.dto.MovimentoRequestDto;
 import br.com.bb.model.entity.Conta;
 import br.com.bb.repository.ContaRepository;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class ContaServiceTest {
@@ -27,7 +28,7 @@ public class ContaServiceTest {
 	@InjectMocks
 	private ContaService contaService;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 	}
@@ -60,7 +61,7 @@ public class ContaServiceTest {
 		verify(contaRepository, times(1)).save(any(Conta.class));
 	}
 
-	@Test(expected = BusinessException.class)
+	@Test
 	public void testCadastrarConta_DuplicateCpfCnpj() {
 		ContaRequestDto requestDto = new ContaRequestDto();
 		requestDto.setNome("Luke Skywalker");
@@ -70,7 +71,7 @@ public class ContaServiceTest {
 
 		when(contaRepository.existsByCpfCnpj(anyString())).thenReturn(true);
 
-		contaService.cadastrarConta(requestDto);
+		assertThrows(BusinessException.class, () -> contaService.cadastrarConta(requestDto));
 	}
 
 	@Test
@@ -92,7 +93,7 @@ public class ContaServiceTest {
 		verify(contaRepository, times(1)).save(any(Conta.class));
 	}
 
-	@Test(expected = EntityNotFoundException.class)
+	@Test
 	public void testDepositarValorContaNaoEncontrada() {
 		MovimentoRequestDto requestDto = new MovimentoRequestDto();
 		requestDto.setCpfCnpj("00000000001");
@@ -100,7 +101,7 @@ public class ContaServiceTest {
 
 		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.empty());
 
-		contaService.realizarDeposito(requestDto);
+		assertThrows(EntityNotFoundException.class, () -> contaService.realizarDeposito(requestDto));
 	}
 
 	@Test
@@ -122,7 +123,7 @@ public class ContaServiceTest {
 		verify(contaRepository, times(1)).save(any(Conta.class));
 	}
 
-	@Test(expected = EntityNotFoundException.class)
+	@Test
 	public void testSacarContaNaoEncontrada() {
 		String cpfCnpj = "00000000001";
 		String numeroConta = "123456";
@@ -130,10 +131,13 @@ public class ContaServiceTest {
 
 		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.empty());
 
-		contaService.realizarSaque(cpfCnpj, numeroConta, valor);
+		// Verifica se EntityNotFoundException é lançada
+		assertThrows(EntityNotFoundException.class, () ->
+				contaService.realizarSaque(cpfCnpj, numeroConta, valor)
+		);
 	}
 
-	@Test(expected = BusinessException.class)
+	@Test
 	public void testSacarSaldoIndisponivel() {
 		String cpfCnpj = "00000000001";
 		String numeroConta = "123456";
@@ -143,7 +147,10 @@ public class ContaServiceTest {
 		conta.setSaldo(BigDecimal.ONE);
 
 		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.of(conta));
-		contaService.realizarSaque(cpfCnpj, numeroConta, valor);
+
+		assertThrows(BusinessException.class, () ->
+				contaService.realizarSaque(cpfCnpj, numeroConta, valor)
+		);
 	}
 
 	@Test
@@ -162,7 +169,7 @@ public class ContaServiceTest {
 		assertEquals(conta, result);
 	}
 
-	@Test(expected = BusinessException.class)
+	@Test
 	public void testConsultarDadosContaInvalida() {
 		String cpfCnpj = "00000000001";
 		String numeroConta = "654321";
@@ -172,17 +179,21 @@ public class ContaServiceTest {
 
 		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.of(conta));
 
-		contaService.consultarDados(cpfCnpj, numeroConta);
+		assertThrows(BusinessException.class, () ->
+				contaService.consultarDados(cpfCnpj, numeroConta)
+		);
 	}
 
-	@Test(expected = EntityNotFoundException.class)
+	@Test
 	public void testConsultarDadosContaNaoEncontrada() {
 		String cpfCnpj = "00000000001";
 		String numeroConta = "123456";
 
 		when(contaRepository.findByCpfCnpj(anyString())).thenReturn(Optional.empty());
 
-		contaService.consultarDados(cpfCnpj, numeroConta);
+		assertThrows(EntityNotFoundException.class, () ->
+				contaService.consultarDados(cpfCnpj, numeroConta)
+		);
 	}
 
 }
