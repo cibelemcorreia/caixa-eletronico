@@ -1,25 +1,38 @@
-# caixa-eletronico
+---
+# Caixa Eletrônico - API
 
-Este projeto foi feito na versão 1.5.3 do Spring Boot.
+API para operações bancárias, incluindo cadastro de contas, depósitos, saques e consultas de saldo.
 
-# Requisitos
+## 📌 Requisitos
 Para executar o aplicativo, você precisa:
 
-[JDK 1.8](https://www.oracle.com/java/technologies/javase/javase8u211-later-archive-downloads.html)
+- **JDK 20** ([Download](https://jdk.java.net/20/))
+- **Maven 3.8.7+** ([Download](https://maven.apache.org/download.cgi))
 
-# Executando o aplicativo localmente
-Para rodar a aplicação execute o método Apllication na classe br.com.bb de seu IDE.
+## ⚙️ Trabalhando Localmente
 
-# Acessando a documentação Swagger
-Swagger - http://localhost:8080/swagger-ui.html
+### Compilando o projeto
+mvn clean package
 
-# Dependências
-- spring-boot-starter-web
-- jakarta.persistence-api
-- spring-boot-starter-data-jpa
-- h2
-- lombok
-- spring-boot-starter-test
-- junit-jupiter-engine
-- springfox-swagger2 - 2.9.2
-- springfox-swagger-ui - 2.9.2
+
+### Executando a aplicação
+mvn spring-boot:run
+
+
+A API estará disponível em **http://localhost:8080**.
+
+## 📖 Acessando a Documentação
+
+- **Swagger UI:**  
+  👉 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+- **OpenAPI JSON:**  
+  👉 [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+
+## 🚀 Tecnologias Utilizadas
+- **Java 20**
+- **Spring Boot 3.2.0**
+- **Spring Data JPA**
+- **H2 Database (para testes)**
+- **SpringDoc OpenAPI (Swagger)**
+- **JUnit 5**
