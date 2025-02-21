@@ -1,5 +1,6 @@
 ---
-# Caixa Eletrônico - API
+# Caixa Eletrônico - API v2.0.0
+
 
 API para operações bancárias, incluindo cadastro de contas, depósitos, saques e consultas de saldo.
 

@@ -11,8 +11,9 @@ public class OpenApiConfig {
 	public OpenAPI customOpenAPI() {
 		return new OpenAPI()
 				.info(new Info()
-						.title("API de Avaliação Técnica")
-						.version("1.0")
-						.description("Documentação da API usando SpringDoc OpenAPI"));
+						.title("Caixa Eletrônico - API")
+						.version("2.0.0")
+						.description("API para operações bancárias, incluindo cadastro de contas, depósitos, saques e consultas de saldo"));
 	}
+
 }
